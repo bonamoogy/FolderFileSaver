@@ -25,14 +25,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _saveImage() async {
-    final dir = await p.getTemporaryDirectory();
-    final pathImage = dir.path + ('example_image.png');
     await FolderFileSaver.getPermission().then((statusPermission) async {
       if (statusPermission == 0) {
         setState(() {
           _isLoading = true;
         });
         String result;
+        final dir = await p.getTemporaryDirectory();
+        final pathImage = dir.path + ('example_image.png');
         try {
           await dio.download(urlImage, pathImage,
               onReceiveProgress: (rec, total) {
@@ -40,9 +40,12 @@ class _MyAppState extends State<MyApp> {
               progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
             });
           });
-          result = await FolderFileSaver.saveImage(
-            pathImage: pathImage,
-          );
+          // if you want to get original of Image
+          // don't give a value of width or height
+          // cause default is return width = 0, height = 0
+          // which will make it to get the original image
+          // just write like this
+          result = await FolderFileSaver.saveImage(pathImage: pathImage);
         } catch (e) {
           result = e;
         }
@@ -55,14 +58,20 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _saveFolderFileExt() async {
+    // if you want check permission user
+    // use like that
+    // if return 0 permission is PERMISSION_GRANTED
+    // if return 1 permission is PERMISSION_IS_DENIED
+    // if return 2 permission is PERMISSION_IS_DENIED with click don't ask again
     await FolderFileSaver.getPermission().then((statusPermission) async {
       if (statusPermission == 0) {
         setState(() {
           _isLoading = true;
         });
-        final dir = await p.getTemporaryDirectory();
-        final filePath = dir.path + ('example_video.mp4');
         String result;
+        final dir = await p.getTemporaryDirectory();
+        // prepare the file and type extension that you want to download
+        final filePath = dir.path + ('example_video.mp4');
         try {
           await dio.download(urlVideo, filePath,
               onReceiveProgress: (rec, total) {
@@ -80,6 +89,22 @@ class _MyAppState extends State<MyApp> {
         });
       }
     });
+  }
+
+  // if you dont need to check permission
+  // just do like this
+  void saveFileNotCheckPermission() async {
+    String result;
+    final dir = await p.getTemporaryDirectory();
+    // prepare the file and type extension that you want to download
+    final filePath = dir.path + ('example_video.mp4');
+    try {
+      await dio.download(urlVideo, filePath);
+      result = await FolderFileSaver.saveFileToFolderExt(filePath);
+    } catch (e) {
+      result = e;
+    }
+    print(result);
   }
 
   @override

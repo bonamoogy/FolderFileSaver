@@ -1,8 +1,8 @@
 name: folder_file_saver
 description: Flutter plugin for save file to Folder extendison of app
-version: 0.0.1
-author: Bona Berto
-homepage:
+version: 0.0.1+1
+author: Bona Berto <bonamoogy@gmail.com>
+homepage: https://github.com/bonamoogy/FolderFileSaver
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
