@@ -2,7 +2,6 @@
 
 Demonstrates how to use the folder_file_saver plugin.
 
-
 ## Example
 ```dart
 void saveFileToFolderExt()async
@@ -50,7 +49,7 @@ void _saveImage() async
         print(result);
 }
 
-// if you don't need to check
+// if you don't need to check permission
 // just do like this
 void saveFileNotCheckPermission() async
 {
@@ -66,6 +65,12 @@ void saveFileNotCheckPermission() async
         }
         print(result);
 }
+
+// Open settings
+RaisedButton(
+  onPressed: () async => await FolderFileSaver.openSetting,
+  child: Text('Open Setting App'),
+),
 ```
 
 ## Getting Started
