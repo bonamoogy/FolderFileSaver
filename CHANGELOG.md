@@ -1,3 +1,8 @@
+## 0.2.0
+
+* Update CHANGELOG
+* Fixes Open setting
+
 ## 0.0.2
 
 * Update CHANGELOG

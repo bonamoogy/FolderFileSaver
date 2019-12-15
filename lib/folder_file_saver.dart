@@ -48,8 +48,8 @@ class FolderFileSaver {
   }
 
   /// Open settings Device
-  static Future<void> get openSetting async {
-    final openSetting = await _channel.invokeMethod('openSetting');
-    return openSetting;
+  static Future<bool> get openSetting async {
+    final openSet = await _channel.invokeMethod('openSetting');
+    return openSet;
   }
 }

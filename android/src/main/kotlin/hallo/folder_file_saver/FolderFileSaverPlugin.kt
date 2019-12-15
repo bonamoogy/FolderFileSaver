@@ -1,7 +1,6 @@
 package hallo.folder_file_saver
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -36,12 +35,12 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        when {
-            call.method == "saveFileToFolderExt" -> {
+        when (call.method) {
+            "saveFileToFolderExt" -> {
                 val filePath = call.argument<String>("filePath")!!
                 result.success(saveFileToFolderExt(filePath))
             }
-            call.method == "saveImage" -> {
+            "saveImage" -> {
                 val imagePath = call.argument<String>("pathImage")!!
                 val width: Int = call.argument<Int>("width")!!
                 val height: Int = call.argument<Int>("height")!!
@@ -55,8 +54,11 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
                     }
                 }
             }
-            call.method == "getPermission" -> result.success(getPermission())
-            call.method == "openSetting" -> result.success(openSettingsPermission())
+            "getPermission" -> result.success(getPermission())
+            "openSetting" -> {
+                openSettingsPermission()
+                result.success(true)
+            }
             else -> result.notImplemented()
         }
     }
@@ -118,15 +120,16 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
 
     private fun appNamed(): String {
         val ctx = registrar.activeContext().applicationContext
-        var ai: ApplicationInfo? = null
+        var aI: ApplicationInfo? = null
         try {
-            ai = ctx.packageManager.getApplicationInfo(ctx.packageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
+            aI = ctx.packageManager.getApplicationInfo(ctx.packageName, 0)
+        } catch (err: PackageManager.NameNotFoundException) {
+            err.printStackTrace()
         }
         val appName: String
-        appName = if (ai != null) {
-            val charSequence = ctx.packageManager.getApplicationLabel(ai)
-            StringBuilder(charSequence.length).append(charSequence).toString()
+        appName = if (aI != null) {
+            val cS = ctx.packageManager.getApplicationLabel(aI)
+            StringBuilder(cS.length).append(cS).toString()
         } else {
             "Folder File Saver"
         }
@@ -164,7 +167,7 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
     }
 
     private fun openSettingsPermission() {
-        val activity: Activity = registrar.activity()
+        val activity = registrar.activity()
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${activity.packageName}"))
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
