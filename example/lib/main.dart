@@ -121,8 +121,9 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             RaisedButton(
               onPressed: _isLoading ? null : _saveImage,
-              child:
-                  Text(_isLoading ? 'Downloading $progress' : 'Download File'),
+              child: Text(_isLoading
+                  ? 'Downloading $progress'
+                  : 'Download Image and Resize'),
             ),
             RaisedButton(
               onPressed: _isLoading ? null : _saveFolderFileExt,
