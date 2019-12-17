@@ -1,6 +1,6 @@
 name: folder_file_saver
 description: Flutter plugin for save file to Folder extenison of your_app. resize image downloaded. create folder by extension. require permission and open setting device.
-version: 0.2.0
+version: 0.2.0+1
 author: Bona Berto <bonamoogy@gmail.com>
 homepage: https://github.com/bonamoogy/FolderFileSaver
 

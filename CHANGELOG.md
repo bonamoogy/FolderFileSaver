@@ -1,3 +1,7 @@
+## 0.2.0+1
+
+* Update README.md
+
 ## 0.2.0
 
 * Update CHANGELOG

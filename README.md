@@ -1,7 +1,7 @@
 # folder_file_saver
 
 This Plugin provides:
-- Displays the file that you downloaded in Gallery from Url
+- Displays the file that you downloaded in Gallery And Media Player from Url
 - Create Folder of your Downloaded
    - jpg, png, jpeg = appname/Pictures
    - mp4 = appname/Videos
