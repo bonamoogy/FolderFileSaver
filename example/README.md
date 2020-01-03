@@ -66,6 +66,23 @@ void saveFileNotCheckPermission() async
         print(result);
 }
 
+// Don't foreget check your permission
+  void copyFileToNewFolder() async {
+    setState(() {
+      _isLoading = true;
+    });
+    // get your path from your device your device
+    final fileToCopy = '/storage/emulated/0/DCIM/Camera/20200102_202226.jpg';
+    try {
+      await FolderFileSaver.saveFileToFolderExt(fileToCopy);
+    } catch (e) {
+      print(e);
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
 // Open settings
 RaisedButton(
   onPressed: () async => await FolderFileSaver.openSetting,

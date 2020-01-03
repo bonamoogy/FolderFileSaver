@@ -2,6 +2,7 @@
 
 This Plugin provides:
 - Displays the file that you downloaded in Gallery And Media Player from Url
+- Copy existing file to new Folder extension
 - Create Folder of your Downloaded
    - jpg, png, jpeg = appname/Pictures
    - mp4 = appname/Videos

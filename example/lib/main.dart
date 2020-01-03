@@ -107,6 +107,23 @@ class _MyAppState extends State<MyApp> {
     print(result);
   }
 
+  // Don't foreget check your permission
+  void copyFileToNewFolder() async {
+    setState(() {
+      _isLoading = true;
+    });
+    // get your path from your device your device
+    final fileToCopy = '/storage/emulated/0/DCIM/Camera/20200102_202226.jpg';
+    try {
+      await FolderFileSaver.saveFileToFolderExt(fileToCopy);
+    } catch (e) {
+      print(e);
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -129,6 +146,10 @@ class _MyAppState extends State<MyApp> {
               onPressed: _isLoading ? null : _saveFolderFileExt,
               child:
                   Text(_isLoading ? 'Downloading $progress' : 'Download File'),
+            ),
+            RaisedButton(
+              onPressed: copyFileToNewFolder,
+              child: Text('Copy File to Folder'),
             ),
             RaisedButton(
               onPressed: () async => await FolderFileSaver.openSetting,
