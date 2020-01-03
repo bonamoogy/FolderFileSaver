@@ -1,3 +1,10 @@
+## 0.3.0
+
+* Add Example to Copy File with local Path
+* Update CHANGELOG
+* Update README.md
+* Update Example
+
 ## 0.2.0+1
 
 * Update README.md
