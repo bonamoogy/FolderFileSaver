@@ -1,3 +1,9 @@
+## 0.4.0 (25 jan 2020)
+
+* Update Android Gradle Version from 3.2.1 to 3.4.
+* Update kotlin version from 1.2.71 to 1.3.50
+* Fix Android The Android Gradle plugin supports only Kotlin Gradle plugin version 1.3.10 and higher
+
 ## 0.3.0
 
 * Add Example to Copy File with local Path
