@@ -1,6 +1,9 @@
 # folder_file_saver
 
-This Plugin provides:
+[![Pub Version](https://img.shields.io/pub/v/folder_file_saver)](https://pub.dev/packages/folder_file_saver)
+[![GitHub](https://img.shields.io/github/license/bonamoogy/folderfilesaver)](https://github.com/bonamoogy/FolderFileSaver/blob/master/LICENSE)
+
+### This Plugin provides
 - Displays the file that you downloaded in Gallery And Media Player from Url
 - Copy existing file to new Folder extension
 - Create Folder of your Downloaded
@@ -25,7 +28,7 @@ You need to request those permissions in AndroidManifest.xml in order the plugin
 
 ### For demo
 
-- git clone https://github.com/bonamoogy/FolderFileSaver.git
+- git clone https://github.com/bonamoogy/FolderFileSaver/archive/master.zip
 - cd folder_file_saver
 - flutter packages get
 - flutter run
