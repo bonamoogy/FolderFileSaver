@@ -6,10 +6,10 @@ class FolderFileSaver {
   static const MethodChannel _channel =
       const MethodChannel('folder_file_saver');
 
-  /// if you want to check permission status
   /// return 0 permission is PERMISSION_GRANTED
   /// return 1 permission is PERMISSION_IS_DENIED
   /// return 2 permission is PERMISSION_IS_DENIED with c
+  /// if you want to check permission status
   /// if return 1 required permission
   /// if return 2 open settings of the app
   /// else permission is granted and ready to download
