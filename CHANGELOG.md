@@ -1,3 +1,7 @@
+## 1.0.0 (16 Oct 2020)
+
+* Migrate to AndroidX
+
 ## 0.4.0+0 (24 june 2020)
 
 * Update README
