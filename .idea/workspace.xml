@@ -11,9 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="1fac3020-8aa9-422e-a2db-c8119851d54e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/hallo/folder_file_saver/FolderFileSaverPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/hallo/folder_file_saver/FolderFileSaverPlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/folder_file_saver.iml" beforeDir="false" afterPath="$PROJECT_DIR$/folder_file_saver.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/folder_file_saver.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/folder_file_saver.dart" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,13 +26,6 @@
     <option name="isMigrated" value="true" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="2.7_QVGA_slider_API_22" />
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>getPermission</find>
-      <find>Unk</find>
-      <find>getPer</find>
-    </findStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>

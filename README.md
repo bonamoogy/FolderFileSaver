@@ -13,10 +13,10 @@
    - m4a = appname/Audios
    - any extension = appname/Documents
 - Download images and resize width and height
-- Check permission user
-   - if permission denied **require permission**
-   - if permission denied with don't ask again **open settings app**
-- Open Settings of device
+- Permission device
+   - Check Permission **check permission**
+   - Request Permission **request permission**
+   - Open Settings of device
 
 #### Android
 You need to request those permissions in AndroidManifest.xml in order the plugin to work

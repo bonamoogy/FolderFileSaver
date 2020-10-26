@@ -1,20 +1,34 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+const CHANNELNAME = 'folder_file_saver';
+
 class FolderFileSaver {
-  static const MethodChannel _channel =
-      const MethodChannel('folder_file_saver');
+  static const MethodChannel _channel = const MethodChannel(CHANNELNAME);
 
   /// return 0 permission is PERMISSION_GRANTED
   /// return 1 permission is PERMISSION_IS_DENIED
-  /// return 2 permission is PERMISSION_IS_DENIED with c
-  /// if you want to check permission status
-  /// if return 1 required permission
-  /// if return 2 open settings of the app
-  /// else permission is granted and ready to download
-  static Future<int> getPermission() async {
-    return await _channel.invokeMethod('getPermission');
+  /// return 2 permission is PERMISSION_IS_DENIED (Don't Ask Again)
+  static Future<int> checkPermission() {
+    return _channel.invokeMethod('checkPermission');
+  }
+
+  /// return 0 permission is PERMISSION_GRANTED
+  /// return 1 permission is PERMISSION_IS_DENIED
+  /// return 2 permission is PERMISSION_IS_DENIED (Don't Ask Again)
+  static Future<int> requestPermission() async {
+    await _channel.invokeMethod('requestPermission');
+    final completer = new Completer<int>();
+    _channel.setMethodCallHandler((call) async {
+      if (call.method == 'resultPermission') {
+        final result = call.arguments as int;
+        completer.complete(result);
+      } else {
+        completer.completeError(null);
+      }
+    });
+    return completer.future;
   }
 
   /// if you want to get original of Image

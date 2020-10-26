@@ -1,3 +1,10 @@
+## 1.0.0+0 (26 Oct 2020)
+
+* Fixed a bug behavior permission which I just realized
+* Chane Example Plugin
+* Update README.md
+* Update CHANGELOG
+
 ## 1.0.0 (16 Oct 2020)
 
 * Migrate to AndroidX

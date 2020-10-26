@@ -16,21 +16,27 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandler {
+const val CHANNEL_NAME = "folder_file_saver"
+
+class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandler, PluginRegistry.RequestPermissionsResultListener {
 
     private val permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    private val mChannel = MethodChannel(registrar.messenger(), CHANNEL_NAME)
 
     companion object {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "folder_file_saver")
-            channel.setMethodCallHandler(FolderFileSaverPlugin(registrar))
+            val channel = MethodChannel(registrar.messenger(), CHANNEL_NAME)
+            val folderFileSaverPlugin: FolderFileSaverPlugin = FolderFileSaverPlugin(registrar)
+            channel.setMethodCallHandler(folderFileSaverPlugin)
+            registrar.addRequestPermissionsResultListener(folderFileSaverPlugin)
         }
     }
 
@@ -54,7 +60,11 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
                     }
                 }
             }
-            "getPermission" -> result.success(getPermission())
+            "checkPermission" -> result.success(checkPermission())
+            "requestPermission" -> {
+                requirePermission()
+                result.success(true)
+            }
             "openSetting" -> {
                 openSettingsPermission()
                 result.success(true)
@@ -136,17 +146,12 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
         return appName
     }
 
-    private fun getPermission(): Int {
-        val cp: Int = checkPermission()
-        if (cp == 1) {
-            requirePermission()
-        } else if (cp == 2) {
-            openSettingsPermission()
-        }
-        return cp
-    }
-
     private fun requirePermission() {
+        val cp = checkPermission()
+        if (cp == 2) {
+            mChannel.invokeMethod("callback", cp)
+            return
+        }
         ActivityCompat.requestPermissions(registrar.activity(), arrayOf(permission), 0)
     }
 
@@ -172,5 +177,10 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         activity.startActivity(intent)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>?, grantResults: IntArray?): Boolean {
+        mChannel.invokeMethod("resultPermission", checkPermission())
+        return grantResults!!.isEmpty() || grantResults[0]!! != PackageManager.PERMISSION_GRANTED
     }
 }
