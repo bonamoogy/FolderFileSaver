@@ -20,33 +20,29 @@ class _MyAppState extends State<MyApp> {
   Dio dio;
   @override
   void initState() {
-    super.initState();
     dio = Dio();
+    super.initState();
   }
 
   void _saveImage() async {
+    
     try {
       setState(() {
         _isLoading = true;
       });
-      final resultCheckPermission = await FolderFileSaver.checkPermission();
 
-      if (resultCheckPermission == 1) {
-        // Request Permission
-        // 0 permission is PERMISSION_GRANTED
-        // 1 permission is PERMISSION_DENIED
-        // 1 permission is PERMISSION_DENIED (don't ask again)
-        final resultRequestPermission =
-            await FolderFileSaver.requestPermission();
-        if (resultRequestPermission != 0) {
+      // 0 permission is PERMISSION_GRANTED
+      // 1 permission is PERMISSION_DENIED
+      // 2 permission is PERMISSION_DENIED wuth (don't ask again)
+      final resultPermission = await FolderFileSaver.requestPermission();
+
+      if (resultPermission == 2) {
           // Do Something Info Here To User
-          return;
-        }
-        await _doSaveImage();
+          // await FolderFileSaver.openSetting;
       }
 
-      // Permission Granted
-      if (resultCheckPermission == 0) {
+      Permission Granted
+      if (resultPermission == 0) {
         await _doSaveImage();
       }
     } catch (e) {
@@ -68,28 +64,21 @@ class _MyAppState extends State<MyApp> {
       // if return 0 permission is PERMISSION_GRANTED
       // if return 1 permission is PERMISSION_IS_DENIED
       // if return 2 permission is PERMISSION_IS_DENIED with click don't ask again
-      final checkPermission = await FolderFileSaver.checkPermission();
+      final resultPermission = await FolderFileSaver.requestPermission();
 
       // 2 permission is PERMISSION_IS_DENIED with click don't ask again
-      if (checkPermission == 2) {
+      if (resultPermission == 2) {
         // Do Something Info Here To User
-        await FolderFileSaver.openSetting;
+        // await FolderFileSaver.openSetting;
       }
 
       // 1 permission is PERMISSION_IS_DENIED
-      if (checkPermission == 1) {
-        // Request Permission
-        final resultRequestPermission =
-            await FolderFileSaver.requestPermission();
-        if (resultRequestPermission != 0) {
-          // Do Something Info Here To User
-          return;
-        }
-        await _doSave();
+      if (resultPermission == 1) {
+        // Do Something Here
       }
 
       // 0 permission is PERMISSION_GRANTED
-      if (checkPermission == 0) {
+      if (resultPermission == 0) {
         await _doSave();
       }
     } catch (e) {

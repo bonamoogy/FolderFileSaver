@@ -60,7 +60,6 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
                     }
                 }
             }
-            "checkPermission" -> result.success(checkPermission())
             "requestPermission" -> {
                 requirePermission()
                 result.success(true)
@@ -147,28 +146,7 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
     }
 
     private fun requirePermission() {
-        val cp = checkPermission()
-        if (cp == 2) {
-            mChannel.invokeMethod("callback", cp)
-            return
-        }
         ActivityCompat.requestPermissions(registrar.activity(), arrayOf(permission), 0)
-    }
-
-    private fun checkPermission(): Int {
-        var stat = 0
-        val ctx = registrar.context()
-        val ac = registrar.activity()
-        val pW = ContextCompat.checkSelfPermission(ctx, permission)
-        if (pW == PackageManager.PERMISSION_DENIED) {
-            val askAgain = ActivityCompat.shouldShowRequestPermissionRationale(ac, permission)
-            stat = if (askAgain) {
-                1
-            } else {
-                2
-            }
-        }
-        return stat
     }
 
     private fun openSettingsPermission() {
@@ -180,7 +158,17 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>?, grantResults: IntArray?): Boolean {
-        mChannel.invokeMethod("resultPermission", checkPermission())
-        return grantResults!!.isEmpty() || grantResults[0]!! != PackageManager.PERMISSION_GRANTED
+        var result = 0
+        val ac = registrar.activity()
+        val notAskAgain = ActivityCompat.shouldShowRequestPermissionRationale(ac, permission);
+        println("$notAskAgain <= Here The Result of shouldShowRequestPermissionRationale");
+        result = if (notAskAgain) {
+            1
+        } else 2
+        if (grantResults?.get(0) == PackageManager.PERMISSION_GRANTED) {
+            result = 0
+        }
+        mChannel.invokeMethod("resultPermission", result)
+        return grantResults!!.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED
     }
 }

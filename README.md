@@ -14,8 +14,8 @@
    - any extension = appname/Documents
 - Download images and resize width and height
 - Permission device
-   - Check Permission **check permission**
    - Request Permission **request permission**
+   - Result Permission **result request permission**
    - Open Settings of device
 
 #### Android

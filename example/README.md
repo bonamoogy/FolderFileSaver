@@ -4,50 +4,51 @@ Demonstrates how to use the folder_file_saver plugin.
 
 ## Example
 ```dart
-void saveFileToFolderExt()async
-{
-// if you want check permission user
-// use like that
-// if return 0 permission is PERMISSION_GRANTED
-// if return 1 permission is PERMISSION_IS_DENIED it will be open require permission
-// if return 2 permission is PERMISSION_IS_DENIED with click don't ask again it will be open setting of app
-await FolderFileSaver.getPermission().then((statusPermission) async {
-      if (statusPermission == 0) {
-        String result;
-        final dir = await p.getTemporaryDirectory();
-        // prepare the file and type that you want to download
-        final filePath = dir.path + ('example_video.mp4');
-        try {
-          await dio.download(urlVideo, filePath);
-          result = await FolderFileSaver.saveFileToFolderExt(filePath);
-        } catch (e) {
-          result = e;
-        }
-        print(result);
-      }
-    });
-}
 
-void _saveImage() async 
-{
-  String result;
-  final dir = await p.getTemporaryDirectory();
-  // prepare the file and type that you want to download
-  final pathImage = dir.path + ('example_image.png');
-        try {
-          await dio.download(urlImage, pathImage);
-          // if you want to get original of Image
-          // don't give a value of width or height
-          // cause default is return width = 0, height = 0
-          // which will make it to get the original image
-          // just write like this
-          result = await FolderFileSaver.saveImage(
-            pathImage: pathImage);
-        } catch (e) {
-          result = e;
-        }
-        print(result);
-}
+void _saveImage() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      // Request Permission
+      // Return int
+      // 0 = permission is PERMISSION_GRANTED
+      // 1 = permission is PERMISSION_DENIED
+      // 2 = permission is PERMISSION_DENIED wuth (don't ask again)
+      final resultPermission = await FolderFileSaver.requestPermission();
+
+      // PERMISSION_DENIED
+      if (resultPermission == 1) {
+         // Do Something Here
+      }
+      
+      // PERMISSION_DENIED wuth (don't ask again)
+      if (resultPermission == 2) {
+          // Do Something Info Here To User
+          // await FolderFileSaver.openSetting;
+      }
+
+      // Permission Is Granted
+      if (resultPermission == 0) {
+          final dir = await p.getTemporaryDirectory();
+          final pathImage = dir.path + ('example_image.png');
+          await dio.download(urlImage, pathImage, onReceiveProgress: (rec, total) {
+            setState(() {
+              progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
+            });
+          });
+          final result = await FolderFileSaver.saveImage(pathImage: pathImage);
+          print(result);
+      }
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
 // if you don't need to check permission
 // just do like this
@@ -66,7 +67,7 @@ void saveFileNotCheckPermission() async
         print(result);
 }
 
-// Don't foreget check your permission
+// Don't forget check your permission
   void copyFileToNewFolder() async {
     setState(() {
       _isLoading = true;
@@ -88,6 +89,7 @@ RaisedButton(
   onPressed: () async => await FolderFileSaver.openSetting,
   child: Text('Open Setting App'),
 ),
+
 ```
 
 ## Getting Started

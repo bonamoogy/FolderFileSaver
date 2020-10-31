@@ -1,3 +1,12 @@
+## 1.0.0+1 (31 Oct 2020)
+
+* Fixed a little bug permission
+* Remove method checkPermission
+* Chane Example Plugin
+* Update README.md
+* Update README.md (example)
+* Update CHANGELOG
+
 ## 1.0.0+0 (26 Oct 2020)
 
 * Fixed a bug behavior permission which I just realized
