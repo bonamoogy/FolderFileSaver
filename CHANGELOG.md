@@ -1,3 +1,8 @@
+## 1.0.0+2 (11 Nov 2020)
+
+* Upgrade gradle-wrapper.properties distributionUrl from 4.10.2 to 5.1.1
+* Update CHANGELOG
+
 ## 1.0.0+1 (31 Oct 2020)
 
 * Fixed a little bug permission
