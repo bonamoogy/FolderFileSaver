@@ -161,7 +161,6 @@ class FolderFileSaverPlugin(private val registrar: Registrar) : MethodCallHandle
         var result = 0
         val ac = registrar.activity()
         val notAskAgain = ActivityCompat.shouldShowRequestPermissionRationale(ac, permission);
-        println("$notAskAgain <= Here The Result of shouldShowRequestPermissionRationale");
         result = if (notAskAgain) {
             1
         } else 2

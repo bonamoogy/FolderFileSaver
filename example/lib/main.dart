@@ -25,7 +25,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _saveImage() async {
-    
     try {
       setState(() {
         _isLoading = true;
@@ -37,11 +36,11 @@ class _MyAppState extends State<MyApp> {
       final resultPermission = await FolderFileSaver.requestPermission();
 
       if (resultPermission == 2) {
-          // Do Something Info Here To User
-          // await FolderFileSaver.openSetting;
+        // Do Something Info Here To User
+        // await FolderFileSaver.openSetting;
       }
 
-      Permission Granted
+      // Permission Granted
       if (resultPermission == 0) {
         await _doSaveImage();
       }
