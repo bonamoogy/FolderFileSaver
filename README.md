@@ -13,7 +13,7 @@
    - m4a = appname/Audios
    - any extension = appname/Documents
 - Download images and resize width and height
-- Open Settings of device
+- Open Settings device
 
 #### Android
 You need to add those permissions in AndroidManifest.xml in order the plugin to work

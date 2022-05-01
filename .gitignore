@@ -16,6 +16,9 @@
 *.iws
 .idea/
 
+# Android
+android
+
 # Visual Studio Code related
 .classpath
 .project
