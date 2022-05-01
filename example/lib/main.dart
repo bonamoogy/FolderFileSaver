@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
       urlImage =
           'https://images.unsplash.com/photo-1576039716094-066beef36943?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80';
 
-  Dio dio;
+  late final Dio dio;
   @override
   void initState() {
     dio = Dio();
@@ -125,7 +125,7 @@ class _MyAppState extends State<MyApp> {
   // Don't forget to check
   // device permission
   void saveFile() async {
-    String result;
+    String? result = '';
     final dir = await p.getTemporaryDirectory();
     // prepare the file and type extension that you want to download
     final filePath = dir.path + ('/example_video.mp4');
@@ -133,7 +133,7 @@ class _MyAppState extends State<MyApp> {
       await dio.download(urlVideo, filePath);
       result = await FolderFileSaver.saveFileToFolderExt(filePath);
     } catch (e) {
-      result = e;
+      result = e.toString();
     }
     print(result);
   }

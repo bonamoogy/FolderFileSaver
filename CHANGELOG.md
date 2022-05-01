@@ -1,3 +1,7 @@
+## 2.0.1 (02 May 2022)
+
+* Fix incorrect `androidPackage: 
+
 ## 2.0.0 (01 May 2022)
 
 * Migrate plugin
