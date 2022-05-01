@@ -1,3 +1,14 @@
+## 2.0.0 (01 May 2022)
+
+* Migrate plugin
+* Migrate to Null Safety
+* remove permission on method, update doc
+* added new params to removeOrigin file after save
+* add package permission_handler to example plugin
+* Update README.md
+* Update CHANGELOG
+* Update version to 2.0.0
+
 ## 1.0.0+2 (11 Nov 2020)
 
 * Upgrade gradle-wrapper.properties distributionUrl from 4.10.2 to 5.1.1

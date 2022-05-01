@@ -1,4 +1,4 @@
-# folder_file_saver
+# Folder File Saver
 
 [![Pub Version](https://img.shields.io/pub/v/folder_file_saver)](https://pub.dev/packages/folder_file_saver)
 [![GitHub](https://img.shields.io/github/license/bonamoogy/folderfilesaver)](https://github.com/bonamoogy/FolderFileSaver/blob/master/LICENSE)
@@ -13,13 +13,10 @@
    - m4a = appname/Audios
    - any extension = appname/Documents
 - Download images and resize width and height
-- Permission device
-   - Request Permission **request permission**
-   - Result Permission **result request permission**
-   - Open Settings of device
+- Open Settings of device
 
 #### Android
-You need to request those permissions in AndroidManifest.xml in order the plugin to work
+You need to add those permissions in AndroidManifest.xml in order the plugin to work
 ```
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 ```
@@ -30,7 +27,7 @@ You need to request those permissions in AndroidManifest.xml in order the plugin
 
 - git clone https://github.com/bonamoogy/FolderFileSaver/archive/master.zip
 - cd folder_file_saver
-- flutter packages get
+- flutter pub get
 - flutter run
 
 ## Getting Started
