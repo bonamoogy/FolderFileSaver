@@ -19,10 +19,12 @@ class _MyAppState extends State<MyApp> {
       urlImage =
           'https://images.unsplash.com/photo-1576039716094-066beef36943?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80';
 
-  late final Dio dio;
+  final Dio dio = Dio();
+
+  final myCustomDir = 'My Custom Directory';
+
   @override
   void initState() {
-    dio = Dio();
     super.initState();
   }
 
@@ -44,6 +46,33 @@ class _MyAppState extends State<MyApp> {
 
       // do save
       await _doSaveImage();
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _saveFileCustomDir() async {
+    try {
+      // get status permission
+      final status = await Permission.storage.status;
+
+      // check status permission
+      if (status.isDenied) {
+        // request permission
+        await Permission.storage.request();
+        return;
+      }
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      // do save
+      await _doSaveFileCustom();
     } catch (e) {
       print(e.toString());
     } finally {
@@ -82,9 +111,36 @@ class _MyAppState extends State<MyApp> {
 
   // Don't forget to check
   // device permission
+  Future<void> _doSaveFileCustom() async {
+    final dir = await p.getTemporaryDirectory();
+    final pathImage = dir.path +
+        ('/your_image_named ${DateTime.now().millisecondsSinceEpoch}.png');
+    await dio.download(urlImage, pathImage, onReceiveProgress: (rec, total) {
+      setState(() {
+        progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
+      });
+    });
+
+    // if you want to get original of Image
+    // don't give a value of width or height
+    // cause default is return width = 0, height = 0
+    // which will make it to get the original image
+    // just write like this
+    // remove originFile default = false
+    final result = await FolderFileSaver.saveFileIntoCustomDir(
+      dirNamed: myCustomDir,
+      filePath: pathImage,
+      removeOriginFile: true,
+    );
+    print(result);
+  }
+
+  // Don't forget to check
+  // device permission
   Future<void> _doSaveImage() async {
     final dir = await p.getTemporaryDirectory();
-    final pathImage = dir.path + ('/example_image.png');
+    final pathImage = dir.path +
+        ('/your_image_named ${DateTime.now().millisecondsSinceEpoch}.png');
     await dio.download(urlImage, pathImage, onReceiveProgress: (rec, total) {
       setState(() {
         progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
@@ -109,7 +165,8 @@ class _MyAppState extends State<MyApp> {
     final dir = await p.getTemporaryDirectory();
     // prepare the file and type extension that you want to download
     // remove originFile after success default = false
-    final filePath = dir.path + ('/example_video.mp4');
+    final filePath = dir.path +
+        ('/your_file_named ${DateTime.now().millisecondsSinceEpoch}.mp4');
     await dio.download(urlVideo, filePath, onReceiveProgress: (rec, total) {
       setState(() {
         progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
@@ -125,17 +182,17 @@ class _MyAppState extends State<MyApp> {
   // Don't forget to check
   // device permission
   void saveFile() async {
-    String? result = '';
     final dir = await p.getTemporaryDirectory();
     // prepare the file and type extension that you want to download
-    final filePath = dir.path + ('/example_video.mp4');
+    final filePath = dir.path +
+        ('/your_file_named ${DateTime.now().millisecondsSinceEpoch}.mp4');
     try {
       await dio.download(urlVideo, filePath);
-      result = await FolderFileSaver.saveFileToFolderExt(filePath);
+      final result = await FolderFileSaver.saveFileToFolderExt(filePath);
+      print(result);
     } catch (e) {
-      result = e.toString();
+      debugPrint(e);
     }
-    print(result);
   }
 
   // Don't foreget check your permission
@@ -176,6 +233,12 @@ class _MyAppState extends State<MyApp> {
                 child: Text(_isLoading
                     ? 'Downloading $progress'
                     : 'Download Image and Resize'),
+              ),
+              ElevatedButton(
+                onPressed: _isLoading ? null : _saveFileCustomDir,
+                child: Text(_isLoading
+                    ? 'Downloading $progress'
+                    : 'Download Image And Save to Custom Directory'),
               ),
               ElevatedButton(
                 onPressed: _isLoading ? null : _saveFolderFileExt,

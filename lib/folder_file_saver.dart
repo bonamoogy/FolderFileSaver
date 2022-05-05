@@ -42,6 +42,19 @@ class FolderFileSaver {
     return _channel.invokeMethod('saveFileToFolderExt', args);
   }
 
+  /// save into custom directory under App name
+  static Future<String?> saveFileIntoCustomDir({
+    required String filePath,
+    required String dirNamed,
+    bool removeOriginFile = false,
+  }) {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent('dirNamed', () => dirNamed);
+    args.putIfAbsent('filePath', () => filePath);
+    args.putIfAbsent('removeOriginFile', () => removeOriginFile);
+    return _channel.invokeMethod('saveFileCustomDir', args);
+  }
+
   /// Open settings Device
   static Future<bool?> get openSetting async {
     return _channel.invokeMethod('openSetting');

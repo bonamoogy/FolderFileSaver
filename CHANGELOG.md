@@ -1,6 +1,15 @@
+## 2.0.2 (02 May 2022)
+
+* Add new method to save custom directory inside your app_named 
+* change filenamed from <current_time_miliseconds> to <original_filenamed>
+* update README.md
+* uppdate main.dart example
+* uppdate AndroidManifest.xml example/android/app/src/main
+* update version
+
 ## 2.0.1 (02 May 2022)
 
-* Fix incorrect `androidPackage: 
+* Fix incorrect `androidPackage" 
 
 ## 2.0.0 (01 May 2022)
 

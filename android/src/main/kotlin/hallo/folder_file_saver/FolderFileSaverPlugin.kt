@@ -36,6 +36,8 @@ class FolderFileSaverPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     private lateinit var context: Context
     private lateinit var activity: Activity
 
+    private var dirNamed: String = ""
+
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
         channel.setMethodCallHandler(this)
@@ -61,6 +63,12 @@ class FolderFileSaverPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
                         val resultPath = saveFileToFolderExt(resizeTo(imagePath, width, height),removeOriginFile)
                         result.success(resultPath)
                     }
+                }
+                "saveFileCustomDir" -> {
+                    dirNamed = call.argument<String>("dirNamed")!!
+                    val filePath = call.argument<String>("filePath")!!
+                    val removeOriginFile: Boolean = call.argument<Boolean>("removeOriginFile")!!
+                    result.success(saveFileToFolderExt(filePath,removeOriginFile))
                 }
                 "openSetting" -> {
                     openSettingsPermission()
@@ -117,12 +125,12 @@ class FolderFileSaverPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     private fun saveFileToFolderExt(filePath: String = "", removeOriginFile:Boolean = true): String {
         return try {
             val originalFile = File(filePath)
-            val file = createFolderOfFile(originalFile.extension)
-            originalFile.copyTo(file)
+            val resultFile = createFolderOfFile(originalFile)
+            originalFile.copyTo(resultFile)
             if(removeOriginFile){
                 originalFile.delete();
             }
-            val uri = Uri.fromFile(file)
+            val uri = Uri.fromFile(resultFile)
             context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
             return uri.toString()
         } catch (e: IOException) {
@@ -131,27 +139,30 @@ class FolderFileSaverPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         }
     }
 
-    private fun createFolderOfFile(extension: String = ""): File {
-        val folderExtNamed: String = when (extension) {
-            "jpg", "png", "jpeg" -> "Pictures"
-            "mp4" -> "Videos"
-            "mp3" -> "Musics"
-            "m4a" -> "Audios"
-            else -> "Documents"
-        }
-        val file = ContextCompat.getExternalFilesDirs(context, null)
-        val isNull = file == null
+    private fun createFolderOfFile(originalFile: File): File {
+        var folderExtNamed = _buildFolderExtNamed(originalFile.extension)
         val pathDir = File.separator + appNamed() + "/" + appNamed() + " " + folderExtNamed
         val storePath = Environment.getExternalStorageDirectory().absolutePath + pathDir
         val appDir = File(storePath)
         if (!appDir.exists()) {
             appDir.mkdir()
         }
-        var fileNamed = System.currentTimeMillis().toString()
-        if (extension.isNotEmpty()) {
-            fileNamed += (".$extension")
-        }
+        var fileNamed = originalFile.getName()
         return File(appDir, fileNamed)
+    }
+
+    private fun _buildFolderExtNamed(ext:String) : String {
+        if(!dirNamed.isNullOrEmpty()) {
+            return dirNamed
+        }
+        var result: String = when (ext) {
+            "jpg", "png", "jpeg" -> "Pictures"
+            "mp4" -> "Videos"
+            "mp3" -> "Musics"
+            "m4a" -> "Audios"
+            else -> "Documents"
+        }
+        return result
     }
 
     private fun appNamed(): String {
