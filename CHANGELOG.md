@@ -1,3 +1,8 @@
+## 2.0.3 (10 May 2022)
+
+* Update package for Android 10 or higher
+* update README.md
+
 ## 2.0.2 (02 May 2022)
 
 * Add new method to save custom directory inside your app_named 

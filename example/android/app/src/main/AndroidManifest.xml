@@ -12,18 +12,18 @@
 
     <!-- for SDK greater than or equals to Android 10(Q). -->
     <!-- android:requestLegacyExternalStorage="true" -->
-    
+
     <application
         android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher"
         android:label="folder_file_saver_example"
-        android:requestLegacyExternalStorage="true"
-        android:icon="@mipmap/ic_launcher">
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
             android:windowSoftInputMode="adjustResize">
             <!-- This keeps the window background of the activity showing
                  until Flutter renders its first frame. It can be removed if
@@ -35,9 +35,10 @@
             <meta-data
                 android:name="flutterEmbedding"
                 android:value="2" />
+
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>

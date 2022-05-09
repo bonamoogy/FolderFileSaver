@@ -7,11 +7,18 @@
 - Displays the file that you downloaded in Gallery And Media Player from Url
 - Copy existing file to new Folder extension
 - Create Folder of your File
-   - jpg, png, jpeg = appname/Pictures
-   - mp4 = appname/Videos
-   - mp3 = appname/Musics
-   - m4a = appname/Audios
-   - any extension = appname/Documents
+   - Android Q or higher
+     - jpg, png, jpeg = Pictures/appname Pictures
+     - mp4 = Videos/appname Videos
+     - mp3 = Musisc/appname Musics
+     - m4a = Audiobooks/appname Audios
+     - any extension = Documents/appname Documents
+   - Under Android Q
+     - jpg, png, jpeg = appname/Pictures
+     - mp4 = appname/Videos
+     - mp3 = appname/Musics
+     - m4a = appname/Audios
+     - any extension = appname/Documents
 - Save file into your custom Directory
 - Download images and resize width and height
 - Open Settings device
