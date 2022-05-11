@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -135,19 +136,20 @@ class FolderFileSaverPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     private fun saveFileToFolderExt(): String {
         return try {
-            val uri: Uri;
+            val result: String
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                uri = saveImageToByMediaStore()
+                result = saveImageToByMediaStore()
             } else {
                 val resultFile = createFolderOfFile()
+                result = resultFile.absolutePath
                 originalFile.copyTo(resultFile)
-                uri = Uri.fromFile(resultFile)
+                val uri = Uri.fromFile(resultFile)
                 context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
             }
             if (removeOriginFile) {
                 originalFile.delete();
             }
-            return uri.toString()
+            return result
         } catch (e: IOException) {
             e.printStackTrace()
             ""
@@ -161,11 +163,10 @@ class FolderFileSaverPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         } else {
             File.separator + appNamed() + "/" + appNamed() + " " + folderExtNamed
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun saveImageToByMediaStore(): Uri {
+    private fun saveImageToByMediaStore(): String {
         val values = ContentValues()
         values.put(MediaStore.MediaColumns.DISPLAY_NAME, originalFile.name)
         values.put(MediaStore.MediaColumns.MIME_TYPE, originalFile.extension)
@@ -174,7 +175,24 @@ class FolderFileSaverPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         val outputStream: OutputStream = context.contentResolver.openOutputStream(uri!!)!!
         outputStream.write(originalFile.readBytes())
         outputStream.close()
-        return uri;
+        return getPathFromUri(uri)
+    }
+
+    private fun getPathFromUri(uri: Uri): String {
+        val list = arrayOf("_data")
+        val cursor = context.contentResolver.query(uri, list, null, null, null)
+        var result = ""
+        try {
+            if (cursor?.moveToFirst() == true) {
+                result = cursor.getString(0)
+            }
+            throw Exception("File uri not found! ${uri.toString()}")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            cursor?.close()
+        }
+        return result
     }
 
     private fun createFolderOfFile(): File {

@@ -1,3 +1,8 @@
+## 2.0.4 (11 May 2022)
+
+* update pacakge from return uri after save to return path of file
+* update README.md
+
 ## 2.0.3 (10 May 2022)
 
 * Update package for Android 10 or higher
