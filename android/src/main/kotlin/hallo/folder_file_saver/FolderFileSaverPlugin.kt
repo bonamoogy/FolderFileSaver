@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -185,9 +186,11 @@ class FolderFileSaverPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         try {
             if (cursor?.moveToFirst() == true) {
                 result = cursor.getString(0)
+            } else {
+                throw Exception("File uri not found! ${uri.toString()}")
             }
-            throw Exception("File uri not found! ${uri.toString()}")
         } catch (e: Exception) {
+            Log.e("getPathFromUri", e.toString())
             e.printStackTrace()
         } finally {
             cursor?.close()

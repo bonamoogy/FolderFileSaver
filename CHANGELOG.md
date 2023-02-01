@@ -1,3 +1,7 @@
+## 2.0.5 (01 Feb 2023)
+
+* Fix error
+
 ## 2.0.4 (11 May 2022)
 
 * update pacakge from return uri after save to return path of file
