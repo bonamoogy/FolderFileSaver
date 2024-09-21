@@ -4,6 +4,7 @@
 [![GitHub](https://img.shields.io/github/license/bonamoogy/folderfilesaver)](https://github.com/bonamoogy/FolderFileSaver/blob/master/LICENSE)
 
 ### This Plugin provides
+- Save file from URL
 - Displays the file that you downloaded in Gallery And Media Player from Url
 - Copy existing file to new Folder extension
 - Create Folder of your File

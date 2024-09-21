@@ -1,62 +1,81 @@
-import 'dart:async';
-import 'package:flutter/services.dart';
-
-const CHANNELNAME = 'folder_file_saver';
+import 'folder_file_saver_platform_interface.dart';
 
 class FolderFileSaver {
-  static const MethodChannel _channel = const MethodChannel(CHANNELNAME);
+  Future<String?> getPlatformVersion() {
+    return FolderFileSaverPlatform.instance.getPlatformVersion();
+  }
 
-  /// if you want to get original of Image
-  /// don't give a value of [width] and [height]
-  /// cause default is return [width] = 0, [height} = 0
-  /// which will make it to get the original image
-  /// remove origin file [removeOriginFile] default false
-  static Future<String?> saveImage({
+  /// Saves an image to local storage with optional resizing
+  ///
+  /// Params:
+  /// - [pathImage]: The path of the image file to be saved (required).
+  /// - [width]: Desired width of the saved image (default is 0 for original width).
+  /// - [height]: Desired height of the saved image (default is 0 for original height).
+  /// - [removeOriginFile]: If true, the original file will be deleted after saving (default is false).
+  Future<String?> saveImage({
     required String pathImage,
     int width = 0,
     int height = 0,
     bool removeOriginFile = false,
   }) async {
-    Map<String, dynamic> args = <String, dynamic>{};
-    args.putIfAbsent('pathImage', () => pathImage.toLowerCase());
-    args.putIfAbsent('width', () => width);
-    args.putIfAbsent('height', () => height);
-    args.putIfAbsent('removeOriginFile', () => removeOriginFile);
-    return _channel.invokeMethod('saveImage', args);
+    final result = await FolderFileSaverPlatform.instance.saveImage(
+      pathImage: pathImage,
+      width: width,
+      height: height,
+      removeOriginFile: removeOriginFile,
+    );
+
+    return result;
   }
 
-  /// type is jpg, jpeg, png = your_app_name/your_app_name Pictures
-  /// type mp4 = your_app_name/your_app_name Videos
-  /// type mp3 = your_app_name/your_app_name Musics
-  /// type m4a = your_app_name/your_app_name Audios
-  /// any type extension = your_app_name/your_app_name Documents
-  /// your path [filePath]
-  /// remove origin file [removeOriginFile] default false
-  static Future<String?> saveFileToFolderExt(
+  /// Saves a file to an external folder
+  ///
+  /// Params:
+  /// - [filePath]: The path of the file to be saved to the external folder (required).
+  /// - [removeOriginFile]: If true, the original file will be deleted after saving (default is false).
+  Future<String?> saveFileToFolderExt(
     String filePath, {
     bool removeOriginFile = false,
   }) async {
-    Map<String, dynamic> args = <String, dynamic>{};
-    args.putIfAbsent('filePath', () => filePath);
-    args.putIfAbsent('removeOriginFile', () => removeOriginFile);
-    return _channel.invokeMethod('saveFileToFolderExt', args);
+    final result = await FolderFileSaverPlatform.instance.saveFileToFolderExt(
+      filePath,
+      removeOriginFile: removeOriginFile,
+    );
+
+    return result;
   }
 
-  /// save into custom directory under App name
-  static Future<String?> saveFileIntoCustomDir({
+  /// Saves a file into a custom directory with a specified name
+  ///
+  /// Params:
+  /// - [filePath]: The path of the file to be saved (required).
+  /// - [dirNamed]: The name of the custom directory where the file will be saved (required).
+  /// - [removeOriginFile]: If true, the original file will be deleted after saving (default is false).
+  Future<String?> saveFileIntoCustomDir({
     required String filePath,
     required String dirNamed,
     bool removeOriginFile = false,
-  }) {
-    Map<String, dynamic> args = <String, dynamic>{};
-    args.putIfAbsent('dirNamed', () => dirNamed);
-    args.putIfAbsent('filePath', () => filePath);
-    args.putIfAbsent('removeOriginFile', () => removeOriginFile);
-    return _channel.invokeMethod('saveFileCustomDir', args);
+  }) async {
+    final result = await FolderFileSaverPlatform.instance.saveFileIntoCustomDir(
+      filePath: filePath,
+      dirNamed: dirNamed,
+      removeOriginFile: removeOriginFile,
+    );
+
+    return result;
   }
 
-  /// Open settings Device
-  static Future<bool?> get openSetting async {
-    return _channel.invokeMethod('openSetting');
+  /// Saves a file from a given URL to local storage
+  ///
+  /// Params:
+  /// - [url]: The URL of the file to be saved.
+  Future<String?> saveFileFromUrl(String url) async {
+    final result = await FolderFileSaverPlatform.instance.saveFileFromUrl(url);
+    return result;
+  }
+
+  /// Opens the app settings, for example, to manage permissions
+  Future<bool?> get openSetting async {
+    return FolderFileSaverPlatform.instance.openSetting;
   }
 }

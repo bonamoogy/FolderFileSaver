@@ -1,3 +1,9 @@
+## 3.0.0 (21 Sept 2024)
+
+* migrate to Flutter 3.0
+* update new method save file from url
+* update Readme
+
 ## 2.0.5 (01 Feb 2023)
 
 * Fix error
