@@ -1,46 +1,32 @@
 # folder_file_saver_example
 
-Demonstrates how to use the folder_file_saver plugin.
+### Demonstrates how to use the folder_file_saver plugin.
 
-## Example
+#### Save Image to Folder and Resize [Optional]
+
 ```dart
-
-void _saveImage() async {
+  void saveImage() async {
     try {
+      // check permission status
+      if (!await permissionIsGranted()) {
+        // request permission
+        return;
+      }
+
       setState(() {
         _isLoading = true;
       });
 
-      // Request Permission
-      // Return int
-      // 0 = permission is PERMISSION_GRANTED
-      // 1 = permission is PERMISSION_DENIED
-      // 2 = permission is PERMISSION_DENIED wuth (don't ask again)
-      final resultPermission = await FolderFileSaver.requestPermission();
+      final pathImage = "example_your_path_image.png";
+      final result = await _folderFileSaverPlugin.saveImage(
+        pathImage: pathImage,
+        removeOriginFile: true,
+        width: 100, // optional
+        height: 100, // optional
+      );
 
-      // PERMISSION_DENIED
-      if (resultPermission == 1) {
-         // Do Something Here
-      }
-      
-      // PERMISSION_DENIED wuth (don't ask again)
-      if (resultPermission == 2) {
-          // Do Something Info Here To User
-          // await FolderFileSaver.openSetting;
-      }
-
-      // Permission Is Granted
-      if (resultPermission == 0) {
-          final dir = await p.getTemporaryDirectory();
-          final pathImage = dir.path + ('example_image.png');
-          await dio.download(urlImage, pathImage, onReceiveProgress: (rec, total) {
-            setState(() {
-              progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
-            });
-          });
-          final result = await FolderFileSaver.saveImage(pathImage: pathImage);
-          print(result);
-      }
+      // print the result path of your file
+      print(result);
     } catch (e) {
       print(e.toString());
     } finally {
@@ -50,44 +36,145 @@ void _saveImage() async {
     }
   }
 
-// if you don't need to check permission
-// just do like this
-void saveFileNotCheckPermission() async
-{
-  String result;
-        final dir = await p.getTemporaryDirectory();
-        // prepare the file and type extension that you want to download
-        final filePath = dir.path + ('example_video.mp4');
-        try {
-          await dio.download(urlVideo, filePath);
-          result = await FolderFileSaver.saveFileToFolderExt(filePath);
-        } catch (e) {
-          result = e;
-        }
-        print(result);
-}
+```
+#### Save File From URL
+```dart
+  Future<void> _saveFileFromUrl() async {
+    try {
+      // check permission status
+      if (!await permissionIsGranted()) {
+        // request permission
+        return;
+      }
 
-// Don't forget check your permission
-  void copyFileToNewFolder() async {
+      setState(() {
+        _isLoading = true;
+      });
+      
+      final result =
+          await _folderFileSaverPlugin.saveFileFromUrl(sampleFileUrl);
+
+      // print the result path of your file
+      print(result);
+    } catch (e) {
+      print("error : $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+```
+
+#### Custom Directory Of Your File
+
+```dart
+  void saveFileToCustomDir() async {
+    try {
+      // check permission status
+      if (!await permissionIsGranted()) {
+        // request permission
+        return;
+      }
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      final dirNamed = "My Custom Directory";
+      final filePath = "<your_file_path";
+
+      final result = await _folderFileSaverPlugin.saveFileIntoCustomDir(
+        dirNamed: dirNamed,
+        filePath: pathImage,
+        removeOriginFile: true,
+      );
+
+      // print the result path of your file
+      print(result);
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+```
+
+#### Save File to Folder Ext
+
+```dart
+  void saveFolderFileExt() async {
+    try {
+      // check permission status
+      if (!await permissionIsGranted()) {
+        // request permission
+        return;
+      }
+
+      // your file path
+      final filePath = "<your_file_path>"
+
+      // return the path of the file
+      final result = await _folderFileSaverPlugin.saveFileToFolderExt(
+        filePath,
+        removeOriginFile: true,
+      );
+
+      // print the result path of your file
+      print(result);
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+```
+
+#### Copy Existing File to Ext Folder
+```dart
+  // copy existing file to folder ext of your app
+  void copyFileToFolderExt() async {
+    // check permission status
+    if (!await permissionIsGranted()) {
+      // request permission
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
-    // get your path from your device your device
-    final fileToCopy = '/storage/emulated/0/DCIM/Camera/20200102_202226.jpg';
+
     try {
-      await FolderFileSaver.saveFileToFolderExt(fileToCopy);
+      // your file path
+      const fileToCopy = '<your_path>';
+      
+      // will return the result path of your file
+      final result = await _folderFileSaverPlugin.saveFileToFolderExt(fileToCopy);
+
+      // print the result path of your file
+      print(result);
     } catch (e) {
       print(e);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
-// Open settings
-RaisedButton(
-  onPressed: () async => await FolderFileSaver.openSetting,
-  child: Text('Open Setting App'),
+```
+
+#### Open settings of your App
+```dart
+ElevatedButton(
+    onPressed: () async {
+        await _folderFileSaverPlugin.openSetting;
+    },
+    child: const Text('Open Setting App'),
 ),
 
 ```
