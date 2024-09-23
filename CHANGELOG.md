@@ -1,3 +1,8 @@
+## 3.0.1 (24 Sept 2024)
+
+* Fix bug application name
+* update gradle
+
 ## 3.0.0 (21 Sept 2024)
 
 * migrate to Flutter 3.0
