@@ -71,6 +71,7 @@ class FolderFileSaverPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 openAppSettings()
                 result.success(true)
             }
+
             else -> result.notImplemented()
         }
     }
@@ -165,7 +166,8 @@ class FolderFileSaverPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun createFolderOfFile(): File {
-        val storePath = "${Environment.getExternalStorageDirectory().absolutePath}${getFolderFileAppNamed()}"
+        val storePath =
+            "${Environment.getExternalStorageDirectory().absolutePath}${getFolderFileAppNamed()}"
         val appDir = File(storePath)
         if (!appDir.exists()) appDir.mkdir()
         requireNotNull(originalFile?.name) { "File name is null" }
@@ -232,8 +234,8 @@ class FolderFileSaverPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun appNamed(): String {
-        var aI: ApplicationInfo? = null
         try {
+            var aI: ApplicationInfo? = null
             if (applicationContext?.packageName == null) {
                 throw NullPointerException("Package name is null")
             }
@@ -242,15 +244,22 @@ class FolderFileSaverPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 applicationContext!!.packageName,
                 0
             )
+
+            if (aI == null) {
+                throw NullPointerException("Application Info is null")
+            }
+
+            val cS = applicationContext?.packageManager?.getApplicationLabel(aI)
+
+            if (cS == null) {
+                throw NullPointerException("Application name is null")
+            }
+
+            return StringBuilder(cS.length).append(cS).toString()
         } catch (err: PackageManager.NameNotFoundException) {
             err.printStackTrace()
-        }
-        return if (aI != null) {
-            val cS = applicationContext?.packageManager?.getApplicationLabel(aI)
-            if (cS != null) StringBuilder(cS.length).append(cS).toString()
-            return ""
-        } else {
-            "Folder File Saver"
+            logError("appNamed", err)
+            return "Folder File Saver"
         }
     }
 

@@ -63,7 +63,7 @@ class _AppPageState extends State<AppPage> {
       await dio.download(_urlImage, pathImage, onReceiveProgress: (rec, total) {
         setState(() {
           if (total != -1) {
-            _progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
+            _progress = "${((rec / total) * 100).toStringAsFixed(0)}%";
           }
         });
       });
@@ -106,7 +106,7 @@ class _AppPageState extends State<AppPage> {
       await dio.download(_urlImage, pathImage, onReceiveProgress: (rec, total) {
         setState(() {
           if (total != -1) {
-            _progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
+            _progress = "${((rec / total) * 100).toStringAsFixed(0)}%";
           }
         });
       });
@@ -153,7 +153,7 @@ class _AppPageState extends State<AppPage> {
         onReceiveProgress: (rec, total) {
           setState(() {
             if (total != -1) {
-              _progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
+              _progress = "${((rec / total) * 100).toStringAsFixed(0)}%";
             }
           });
         },
