@@ -1,19 +1,32 @@
 ## 3.1.0 (24 Nov 2026)
 
+* **iOS support.** Images and videos are saved to the Photos library (add-only permission); other files go to a folder named after the app in the Files app. Supports CocoaPods and Swift Package Manager.
+* New API that returns a `SavedFile` (name, path, URI and location) and throws a `FolderFileSaverException` with an error code when saving fails:
+  * `saveFile(path, folderName:, deleteOriginal:)`
+  * `saveResizedImage(path, width:, height:, folderName:, deleteOriginal:)`
+  * `saveFromUrl(url, fileName:, folderName:, headers:)`
+  * `openAppSettings()`
+* `saveFromUrl` can set the file name and send request headers.
+* The plugin now asks for the storage permission on Android 9 and lower by itself.
+* More file types are sorted into the right folder (gif, webp, heic, mov, wav, aac…).
+* Deprecated: `saveImage`, `saveFileToFolderExt`, `saveFileIntoCustomDir`, `saveFileFromUrl`, `openSetting` and `getPlatformVersion`. They still work and will be removed in 4.0.0. See the README for the new names.
+* Rewritten example app, with integration tests.
+
+### Fixes and Android updates
+
 * Update Android build to AGP 9.1, Kotlin 2.4, Gradle 9.3.1, Java 17 and compileSdk 36 (Gradle Kotlin DSL)
 * Keep working in apps still on AGP 8 / older Flutter versions
 * Fix crash when the screen rotates or the activity is detached
 * Fix app crash when an image cannot be decoded or a save fails; failures now return `null` and are logged
 * Fix concurrent calls overwriting each other's settings
 * Fix MIME type sent to MediaStore (`image/png` instead of `png`)
-* `saveImage` no longer overwrites the original file when resizing, keeps JPEG/WebP format, and keeps the aspect ratio when only width or height is given
+* `saveImage` no longer overwrites the original file when resizing, keeps JPEG format, and keeps the aspect ratio when only width or height is given
 * `saveFileFromUrl` uses the real file name (from the URL or server), handles URLs without an extension or with a query string, and follows http/https redirects
 * Same file name saved twice is stored as `name (1).ext` instead of failing
 * Fix saving on Android 9 and lower when the app folder did not exist yet
 * File extensions are matched case-insensitively (`.JPG` goes to Pictures)
 * `WRITE_EXTERNAL_STORAGE` is only requested up to Android 9; Android 10+ needs no permission
 * Remove the undeclared kotlinx.coroutines dependency
-* Example app: works on Android 13+, shows the saved path, updated dependencies and tests
 
 ## 3.0.1 (24 Sept 2024)
 

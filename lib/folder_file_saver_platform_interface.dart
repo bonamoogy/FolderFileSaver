@@ -1,7 +1,11 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'folder_file_saver_method_channel.dart';
+import 'src/saved_file.dart';
 
+/// The interface each platform implementation of folder_file_saver extends.
+///
+/// App code should use `FolderFileSaver` instead of calling this directly.
 abstract class FolderFileSaverPlatform extends PlatformInterface {
   FolderFileSaverPlatform() : super(token: _token);
 
@@ -9,6 +13,7 @@ abstract class FolderFileSaverPlatform extends PlatformInterface {
 
   static FolderFileSaverPlatform _instance = MethodChannelFolderFileSaver();
 
+  /// The implementation in use. Defaults to [MethodChannelFolderFileSaver].
   static FolderFileSaverPlatform get instance => _instance;
 
   static set instance(FolderFileSaverPlatform instance) {
@@ -17,39 +22,37 @@ abstract class FolderFileSaverPlatform extends PlatformInterface {
   }
 
   Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+    throw UnimplementedError('getPlatformVersion() has not been implemented.');
   }
 
-  Future<String?> saveFileFromUrl(String url) {
-    throw UnimplementedError('saveFileFromUrl() has not been implemented.');
-  }
-
-  Future<String?> saveImage({
-    required String pathImage,
-    int width = 0,
-    int height = 0,
-    bool removeOriginFile = false,
-  }) {
-    throw UnimplementedError('saveImage() has not been implemented.');
-  }
-
-  Future<String?> saveFileToFolderExt(
-    String filePath, {
-    bool removeOriginFile = false,
-  }) {
-    throw UnimplementedError('saveFileToFolderExt() has not been implemented.');
-  }
-
-  Future<String?> saveFileIntoCustomDir({
+  Future<SavedFile> saveFile({
     required String filePath,
-    required String dirNamed,
-    bool removeOriginFile = false,
+    String? folderName,
+    bool deleteOriginal = false,
   }) {
-    throw UnimplementedError(
-        'saveFileIntoCustomDir() has not been implemented.');
+    throw UnimplementedError('saveFile() has not been implemented.');
   }
 
-  Future<bool?> get openSetting async {
-    throw UnimplementedError('openSetting() has not been implemented.');
+  Future<SavedFile> saveResizedImage({
+    required String imagePath,
+    int? width,
+    int? height,
+    String? folderName,
+    bool deleteOriginal = false,
+  }) {
+    throw UnimplementedError('saveResizedImage() has not been implemented.');
+  }
+
+  Future<SavedFile> saveFromUrl({
+    required String url,
+    String? fileName,
+    String? folderName,
+    Map<String, String>? headers,
+  }) {
+    throw UnimplementedError('saveFromUrl() has not been implemented.');
+  }
+
+  Future<bool> openAppSettings() {
+    throw UnimplementedError('openAppSettings() has not been implemented.');
   }
 }

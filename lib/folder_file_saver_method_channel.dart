@@ -2,68 +2,88 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'folder_file_saver_platform_interface.dart';
-import 'utils/constant.dart';
+import 'src/folder_file_saver_exception.dart';
+import 'src/method_names.dart';
+import 'src/saved_file.dart';
 
+/// The default [FolderFileSaverPlatform], which talks to the native side
+/// over a [MethodChannel].
 class MethodChannelFolderFileSaver extends FolderFileSaverPlatform {
   @visibleForTesting
-  final methodChannel = const MethodChannel('folder_file_saver');
+  final methodChannel = const MethodChannel(MethodNames.channel);
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>(Constant.getPlatformVersion);
-    return version;
+  Future<String?> getPlatformVersion() {
+    return methodChannel.invokeMethod<String>(MethodNames.getPlatformVersion);
   }
 
   @override
-  Future<String?> saveFileFromUrl(String url) {
-    final args = {'url': url};
-    return methodChannel.invokeMethod<String>(Constant.saveFileFromUrl, args);
+  Future<SavedFile> saveFile({
+    required String filePath,
+    String? folderName,
+    bool deleteOriginal = false,
+  }) {
+    return _save(MethodNames.saveFile, {
+      'filePath': filePath,
+      'folderName': folderName,
+      'deleteOriginal': deleteOriginal,
+    });
   }
 
   @override
-  Future<String?> saveImage(
-      {required String pathImage,
-      int width = 0,
-      int height = 0,
-      bool removeOriginFile = false}) {
-    final args = {
-      'pathImage': pathImage,
+  Future<SavedFile> saveResizedImage({
+    required String imagePath,
+    int? width,
+    int? height,
+    String? folderName,
+    bool deleteOriginal = false,
+  }) {
+    return _save(MethodNames.saveResizedImage, {
+      'imagePath': imagePath,
       'width': width,
       'height': height,
-      'removeOriginFile': removeOriginFile,
-    };
-    return methodChannel.invokeMethod<String>(Constant.saveImage, args);
+      'folderName': folderName,
+      'deleteOriginal': deleteOriginal,
+    });
   }
 
   @override
-  Future<String?> saveFileToFolderExt(
-    String filePath, {
-    bool removeOriginFile = false,
+  Future<SavedFile> saveFromUrl({
+    required String url,
+    String? fileName,
+    String? folderName,
+    Map<String, String>? headers,
   }) {
-    final args = {
-      'filePath': filePath,
-      'removeOriginFile': removeOriginFile,
-    };
-    return methodChannel.invokeMethod<String>(
-        Constant.saveFileToFolderExt, args);
+    return _save(MethodNames.saveFromUrl, {
+      'url': url,
+      'fileName': fileName,
+      'folderName': folderName,
+      'headers': headers,
+    });
   }
 
   @override
-  Future<String?> saveFileIntoCustomDir(
-      {required String filePath,
-      required String dirNamed,
-      bool removeOriginFile = false}) {
-    final args = {
-      'dirNamed': dirNamed,
-      'filePath': filePath,
-      'removeOriginFile': removeOriginFile,
-    };
-    return methodChannel.invokeMethod<String>(Constant.saveFileCustomDir, args);
+  Future<bool> openAppSettings() async {
+    final opened =
+        await methodChannel.invokeMethod<bool>(MethodNames.openAppSettings);
+    return opened ?? false;
   }
 
-  @override
-  Future<bool?> get openSetting async {
-    return methodChannel.invokeMethod<bool?>(Constant.openSetting);
+  /// Calls [method] and turns its reply into a [SavedFile], or its error
+  /// into a [FolderFileSaverException].
+  Future<SavedFile> _save(String method, Map<String, Object?> arguments) async {
+    try {
+      final result = await methodChannel.invokeMapMethod<Object?, Object?>(
+          method, arguments);
+      if (result == null) {
+        throw FolderFileSaverException(
+          FolderFileSaverErrorCode.unknown,
+          '$method returned no result',
+        );
+      }
+      return SavedFile.fromMap(result);
+    } on PlatformException catch (e) {
+      throw FolderFileSaverException.fromPlatformException(e);
+    }
   }
 }

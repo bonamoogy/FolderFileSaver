@@ -39,7 +39,20 @@ internal class FolderFileSaverPluginTest {
         val plugin = FolderFileSaverPlugin()
         val mockResult: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)
 
-        plugin.onMethodCall(MethodCall("saveFileFromUrl", emptyMap<String, Any>()), mockResult)
+        plugin.onMethodCall(MethodCall("saveFromUrl", emptyMap<String, Any>()), mockResult)
+
+        Mockito.verify(mockResult).error(eq("INVALID_ARGUMENT"), anyString(), any())
+    }
+
+    @Test
+    fun onMethodCall_resizeWithoutSize_returnsError() {
+        val plugin = FolderFileSaverPlugin()
+        val mockResult: MethodChannel.Result = Mockito.mock(MethodChannel.Result::class.java)
+
+        plugin.onMethodCall(
+            MethodCall("saveResizedImage", mapOf("imagePath" to "/tmp/a.png", "width" to 0)),
+            mockResult,
+        )
 
         Mockito.verify(mockResult).error(eq("INVALID_ARGUMENT"), anyString(), any())
     }

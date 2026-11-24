@@ -21,6 +21,9 @@ class FileUtilsTest {
         assertEquals(FileCategory.AUDIOBOOKS, FileCategory.fromExtension("m4a"))
         assertEquals(FileCategory.DOCUMENTS, FileCategory.fromExtension("pdf"))
         assertEquals(FileCategory.DOCUMENTS, FileCategory.fromExtension(""))
+        assertEquals(FileCategory.PICTURES, FileCategory.fromExtension("gif"))
+        assertEquals(FileCategory.VIDEOS, FileCategory.fromExtension("MOV"))
+        assertEquals(FileCategory.MUSIC, FileCategory.fromExtension("wav"))
     }
 
     @Test
@@ -59,6 +62,17 @@ class FileUtilsTest {
             "naïve file.txt",
             FileUtils.fileNameFromContentDisposition(
                 "attachment; filename=\"fallback.txt\"; filename*=UTF-8''na%C3%AFve%20file.txt",
+            ),
+        )
+    }
+
+    @Test
+    fun preferredNameWinsAndGetsAnExtension() {
+        assertEquals(
+            "my photo.png",
+            FileUtils.resolveDownloadFileName(
+                "https://example.com/a.jpg", "attachment; filename=\"b.jpg\"", "image/png",
+                mimeToExtension, "fallback", preferredName = "my photo",
             ),
         )
     }

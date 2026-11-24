@@ -4,20 +4,25 @@ import java.io.File
 import java.net.URI
 import java.net.URLDecoder
 
-/** The kind of folder a file is saved into, picked from its extension. */
-enum class FileCategory(val folderName: String) {
-    PICTURES("Pictures"),
-    VIDEOS("Videos"),
-    MUSIC("Audios"),
-    AUDIOBOOKS("Audios"),
-    DOCUMENTS("Documents");
+/**
+ * The kind of folder a file is saved into, picked from its extension.
+ *
+ * [folderName] is the default suffix of the app folder ("<App name> Pictures"),
+ * and [location] is the `SaveLocation` name reported to Dart.
+ */
+enum class FileCategory(val folderName: String, val location: String) {
+    PICTURES("Pictures", "pictures"),
+    VIDEOS("Videos", "videos"),
+    MUSIC("Audios", "music"),
+    AUDIOBOOKS("Audios", "audiobooks"),
+    DOCUMENTS("Documents", "documents");
 
     companion object {
         fun fromExtension(extension: String): FileCategory =
             when (extension.lowercase()) {
-                "jpg", "jpeg", "png" -> PICTURES
-                "mp4" -> VIDEOS
-                "mp3" -> MUSIC
+                "jpg", "jpeg", "png", "gif", "webp", "heic", "heif", "bmp" -> PICTURES
+                "mp4", "mov", "m4v", "3gp", "webm", "mkv" -> VIDEOS
+                "mp3", "wav", "aac", "ogg", "flac", "opus" -> MUSIC
                 "m4a" -> AUDIOBOOKS
                 else -> DOCUMENTS
             }
@@ -74,8 +79,10 @@ object FileUtils {
         contentType: String?,
         extensionForMimeType: (String) -> String?,
         fallbackBaseName: String,
+        preferredName: String? = null,
     ): String {
-        val rawName = fileNameFromContentDisposition(contentDisposition)
+        val rawName = preferredName?.takeIf { it.isNotBlank() }
+            ?: fileNameFromContentDisposition(contentDisposition)
             ?: fileNameFromUrl(url)
         var name = rawName?.let(::sanitizeFileName)?.takeIf { it.isNotEmpty() }
             ?: fallbackBaseName
