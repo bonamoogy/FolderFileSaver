@@ -1,11 +1,11 @@
 name: folder_file_saver
-description: Flutter plugin for save file to Folder extenison of your_app. resize image downloaded. create folder by extension. require permission and open setting device.
-version: 3.0.1
+description: Flutter plugin to save files into your app's folder by file type (Pictures, Videos, Audios, Documents) on Android, download files from a URL, resize images and open the app settings.
+version: 3.1.0
 homepage: https://github.com/bonamoogy/FolderFileSaver
 
 environment:
-  sdk: ^3.5.2
-  flutter: '>=3.3.0'
+  sdk: ^3.5.0
+  flutter: '>=3.24.0'
 
 dependencies:
   flutter:
@@ -15,7 +15,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

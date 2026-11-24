@@ -12,12 +12,10 @@ class MockFolderFileSaverPlatform
 
   @override
   Future<String?> saveFileFromUrl(String url) {
-    // TODO: implement saveFileFromUrl
     throw UnimplementedError();
   }
 
   @override
-  // TODO: implement openSetting
   Future<bool?> get openSetting => throw UnimplementedError();
 
   @override
@@ -25,14 +23,12 @@ class MockFolderFileSaverPlatform
       {required String filePath,
       required String dirNamed,
       bool removeOriginFile = false}) {
-    // TODO: implement saveFileIntoCustomDir
     throw UnimplementedError();
   }
 
   @override
   Future<String?> saveFileToFolderExt(String filePath,
       {bool removeOriginFile = false}) {
-    // TODO: implement saveFileToFolderExt
     throw UnimplementedError();
   }
 
@@ -42,7 +38,6 @@ class MockFolderFileSaverPlatform
       int width = 0,
       int height = 0,
       bool removeOriginFile = false}) {
-    // TODO: implement saveImage
     throw UnimplementedError();
   }
 }

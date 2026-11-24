@@ -1,3 +1,20 @@
+## 3.1.0 (24 Nov 2026)
+
+* Update Android build to AGP 9.1, Kotlin 2.4, Gradle 9.3.1, Java 17 and compileSdk 36 (Gradle Kotlin DSL)
+* Keep working in apps still on AGP 8 / older Flutter versions
+* Fix crash when the screen rotates or the activity is detached
+* Fix app crash when an image cannot be decoded or a save fails; failures now return `null` and are logged
+* Fix concurrent calls overwriting each other's settings
+* Fix MIME type sent to MediaStore (`image/png` instead of `png`)
+* `saveImage` no longer overwrites the original file when resizing, keeps JPEG/WebP format, and keeps the aspect ratio when only width or height is given
+* `saveFileFromUrl` uses the real file name (from the URL or server), handles URLs without an extension or with a query string, and follows http/https redirects
+* Same file name saved twice is stored as `name (1).ext` instead of failing
+* Fix saving on Android 9 and lower when the app folder did not exist yet
+* File extensions are matched case-insensitively (`.JPG` goes to Pictures)
+* `WRITE_EXTERNAL_STORAGE` is only requested up to Android 9; Android 10+ needs no permission
+* Remove the undeclared kotlinx.coroutines dependency
+* Example app: works on Android 13+, shows the saved path, updated dependencies and tests
+
 ## 3.0.1 (24 Sept 2024)
 
 * Fix bug application name
